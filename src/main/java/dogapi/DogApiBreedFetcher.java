@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class DogApiBreedFetcher implements BreedFetcher {
     private final OkHttpClient client = new OkHttpClient();
-
+    private final String url = "https://dog.ceo/api/breeds/list/all";
     /**
      * Fetch the list of sub breeds for the given breed from the dog.ceo API.
      * @param breed the breed to fetch sub breeds for
@@ -24,11 +24,24 @@ public class DogApiBreedFetcher implements BreedFetcher {
      * @throws BreedNotFoundException if the breed does not exist (or if the API call fails for any reason)
      */
     @Override
-    public List<String> getSubBreeds(String breed) {
-        // TODO Task 1: Complete this method based on its provided documentation
-        //      and the documentation for the dog.ceo API. You may find it helpful
-        //      to refer to the examples of using OkHttpClient from the last lab,
-        //      as well as the code for parsing JSON responses.
+    public List<String> getSubBreeds(String breed) throws BreedNotFoundException {
+        // Task 1: Complete this method based on its provided documentation
+        // and the documentation for the dog.ceo API. You may find it helpful
+        // to refer to the examples of using OkHttpClient from the last lab,
+        // as well as the code for parsing JSON responses.
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        try {
+            final Response response = client.newCall(request).execute();
+            final JSONObject responseBody = new JSONObject();
+            String st = response.body().string();
+
+        } catch (IOException e) {
+            throw new RuntimeException("ERROR: Problem with writing/reading the file");
+        } catch (BreedNotFoundException e) {
+            throw new BreedNotFoundException(e.getMessage());
+        }
         // return statement included so that the starter code can compile and run.
         return new ArrayList<>();
     }
