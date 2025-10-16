@@ -34,13 +34,12 @@ public class DogApiBreedFetcher implements BreedFetcher {
                 .build();
         try {
             final Response response = client.newCall(request).execute();
-            final JSONObject responseBody = new JSONObject();
-            String st = response.body().string();
+            final JSONObject responseBody = new JSONObject(response.body().string());
 
-        } catch (IOException e) {
-            throw new RuntimeException("ERROR: Problem with writing/reading the file");
         } catch (BreedNotFoundException e) {
             throw new BreedNotFoundException(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         // return statement included so that the starter code can compile and run.
         return new ArrayList<>();
