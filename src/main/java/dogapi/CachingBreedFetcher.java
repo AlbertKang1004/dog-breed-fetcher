@@ -13,16 +13,28 @@ import java.util.*;
  * The cache maps the name of a breed to its list of sub breed names.
  */
 public class CachingBreedFetcher implements BreedFetcher {
-    // TODO Task 2: Complete this class
+    private final BreedFetcher fetcher;
+    private final Map<String, List<String>> cachedBreed;
+    // Task 2: Complete this class
     private int callsMade = 0;
     public CachingBreedFetcher(BreedFetcher fetcher) {
-
+        this.fetcher = fetcher;
+        this.cachedBreed = new HashMap<>();
     }
 
     @Override
-    public List<String> getSubBreeds(String breed) {
-        // return statement included so that the starter code can compile and run.
-        return new ArrayList<>();
+    public List<String> getSubBreeds(String breed) throws BreedNotFoundException {
+        if (cachedBreed.containsKey(breed)) {
+            return cachedBreed.get(breed);
+        }
+        callsMade++;
+        try {
+            List<String> result = fetcher.getSubBreeds(breed);
+            cachedBreed.put(breed, result);
+            return result;
+        } catch (BreedNotFoundException e) {
+            throw new BreedNotFoundException(breed);
+        }
     }
 
     public int getCallsMade() {
